@@ -1,3 +1,5 @@
 pyspark==3.5.1
 jupyter
-pandas
+pandas==2.3.3
+awswrangler==3.13.0
+duckdb==1.4.1
