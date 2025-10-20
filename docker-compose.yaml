@@ -12,3 +12,52 @@ services:
     command: ["server", "/data", "--console-address", ":9001"]
     volumes:
       - ./minio-data:/data
+
+  # trino:
+  #   image: 'trinodb/trino:444'
+  #   container_name: trino
+  #   volumes:
+  #     - ./etc/catalog:/etc/trino/catalog
+  #   ports:
+  #     - '8080:8080'
+
+
+  # metastore:
+  #   image: postgres:alpine3.19
+  #   ports:
+  #     - 5432:5432
+  #   environment:
+  #     - POSTGRES_USER=postgres-user
+  #     - POSTGRES_PASSWORD=postgres-password
+  #     - POSTGRES_DB=iceberg
+  #   healthcheck:
+  #     test: ["CMD-SHELL", "pg_isready -U postgres-user -d iceberg"]
+  #     interval: 5s
+  #     timeout: 5s
+  #     retries: 5
+
+  dremio:
+      image: dremio/dremio-oss:24.1
+      container_name: dremio
+      ports:  
+        - 9047:9047 
+        - 31010:31010 
+        - 45678:45678
+      volumes:
+        - dremio:/opt/dremio/data
+      deploy:
+        restart_policy:
+          condition: on-failure
+          delay: 5s
+          max_attempts: 3
+          window: 120s
+
+  nessie:
+      image: projectnessie/nessie:0.67.0
+      container_name: nessie
+      ports:
+        - 19120:19120
+      environment:
+        - QUARKUS_OPENTELEMETRY_ENABLED=false
+volumes: 
+  dremio:
