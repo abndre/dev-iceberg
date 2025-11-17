@@ -11,10 +11,9 @@ docker exec -it spark-iceberg ./bin/spark-submit teste.py
 ```
 
 ```
-docker compose up
-
-criar um usuario, nos noteboks ele se chama teste:password, recomendo usar  o mesmo
-criar dois bucket silver e  bronze e adicionar o usuario teste com acessos escrita e leitura
+docker compose up minio dremio nessie -d
+# caso nao tenha criado os buckets
+docker compose up minio-init
 ```
 
 ## Tutorials
@@ -27,3 +26,6 @@ To configure your **S3 source** for **Minio** in the Dremio UI:
 2. Under *Advanced Options > Connection Properties*, add **fs.s3a.path.style.access** and set the value to **true**.
 3. Under *Advanced Options > Connection Properties*, add the **fs.s3a.endpoint** property and its corresponding server endpoint value (*minio:9000* in the Datafuel ecosystem).
 4. Under *Advanced Options > Connection Properties*, add the **dremio.s3.compat** and set the value to **true**.
+5. Uncheck “encrypt connection” (since our local Nessie instance is running on http)
+
+![alt text](image.png)
